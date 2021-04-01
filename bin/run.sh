@@ -31,14 +31,14 @@ mkdir -p "${output_dir}"
 
 echo "${slug}: testing..."
 
-pushd "${input_dir}"
+pushd "${input_dir}" > /dev/null
 
 # Run the tests for the provided implementation file and redirect stdout and
 # stderr to capture it
 test_output=$(busted --verbose 2>&1)
 exit_code=$?
 
-popd
+popd > /dev/null
 
 # Write the results.json file based on the exit code of the command that was 
 # just executed that tested the implementation file
