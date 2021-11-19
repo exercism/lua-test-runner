@@ -1,2 +1,7 @@
 .github/
 tests/
+.appends
+.gitignore
+.gitattributes
+.dockerignore
+Dockerfile
