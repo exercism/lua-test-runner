@@ -1,5 +1,5 @@
 {
-  "version": 1,
-  "status": "fail",
-  "message": "*\n0 successes / 0 failures / 1 error / 0 pending : \n\nError -> ./example_syntax_error_spec.lua @ 1\nsuite ./example_syntax_error_spec.lua\n./example_syntax_error_spec.lua:1: error loading module 'example_syntax_error' from file './example_syntax_error.lua':\n\t./example_syntax_error.lua:1: syntax error near 'leap_year'\n\nstack traceback:\n\t./example_syntax_error_spec.lua:1: in main chunk"
+  "version": 2,
+  "status": "error",
+  "message": "./example_syntax_error_spec.lua:1: error loading module 'example_syntax_error' from file './example_syntax_error.lua':\n\t./example_syntax_error.lua:1: syntax error near 'leap_year'"
 }

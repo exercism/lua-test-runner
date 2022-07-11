@@ -1,4 +1,26 @@
 {
-  "version": 1,
-  "status": "pass"
+  "version":2,
+  "status":"pass",
+  "tests": [
+    {
+      "name": "a known leap year",
+      "status": "pass",
+      "test_code": "assert.is_true(is_leap_year(1996))"
+    },
+    {
+      "name": "any old year",
+      "status": "pass",
+      "test_code": "assert.is_false(is_leap_year(1997))"
+    },
+    {
+      "name": "turn of the 20th century",
+      "status": "pass",
+      "test_code": "assert.is_false(is_leap_year(1900))"
+    },
+    {
+      "name": "turn of the 21st century",
+      "status": "pass",
+      "test_code": "assert.is_true(is_leap_year(2400))"
+    }
+  ]
 }
