@@ -1,4 +1,4 @@
-local is_leap_year = require('example_success')
+local is_leap_year = require('example_all_fail')
 
 describe('leap', function()
   it('a known leap year', function()
