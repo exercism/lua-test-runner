@@ -21,10 +21,11 @@ if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ]; then
     exit 1
 fi
 
-slug="$1"
+slug="${1}"
 input_dir="${2%/}"
 output_dir="${3%/}"
 results_file="${output_dir}/results.json"
+output_handler="$(realpath ./handler/exercism.lua)"
 
 # Create the output directory if it doesn't exist
 mkdir -p "${output_dir}"
@@ -33,19 +34,10 @@ echo "${slug}: testing..."
 
 pushd "${input_dir}" > /dev/null
 
-# Run the tests for the provided implementation file and redirect stdout and
-# stderr to capture it
-test_output=$(busted --verbose 2>&1)
-exit_code=$?
+test_output=$(busted --verbose -o "${output_handler}" -Xoutput "--slug=${slug}")
 
 popd > /dev/null
 
-# Write the results.json file based on the exit code of the command that was 
-# just executed that tested the implementation file
-if [ $exit_code -eq 0 ]; then
-    jq -n '{version: 1, status: "pass"}' > ${results_file}
-else
-    jq -n --arg output "${test_output}" '{version: 1, status: "fail", message: $output}' > ${results_file}
-fi
+echo "${test_output}" > ${results_file}
 
 echo "${slug}: done"
