@@ -1,5 +1,5 @@
 {
-  "version": 1,
-  "status": "fail",
-  "message": "****\n0 successes / 0 failures / 4 errors / 0 pending : \n\nError -> ./example_empty_file_spec.lua @ 4\nleap a known leap year\n./example_empty_file_spec.lua:5: attempt to call a boolean value (upvalue 'is_leap_year')\n\nstack traceback:\n\t./example_empty_file_spec.lua:5: in function <./example_empty_file_spec.lua:4>\n\n\nError -> ./example_empty_file_spec.lua @ 8\nleap any old year\n./example_empty_file_spec.lua:9: attempt to call a boolean value (upvalue 'is_leap_year')\n\nstack traceback:\n\t./example_empty_file_spec.lua:9: in function <./example_empty_file_spec.lua:8>\n\n\nError -> ./example_empty_file_spec.lua @ 12\nleap turn of the 20th century\n./example_empty_file_spec.lua:13: attempt to call a boolean value (upvalue 'is_leap_year')\n\nstack traceback:\n\t./example_empty_file_spec.lua:13: in function <./example_empty_file_spec.lua:12>\n\n\nError -> ./example_empty_file_spec.lua @ 16\nleap turn of the 21st century\n./example_empty_file_spec.lua:17: attempt to call a boolean value (upvalue 'is_leap_year')\n\nstack traceback:\n\t./example_empty_file_spec.lua:17: in function <./example_empty_file_spec.lua:16>"
+  "version": 2,
+  "status": "error",
+  "message": "./example_empty_file_spec.lua:5: attempt to call a boolean value (upvalue 'is_leap_year')"
 }

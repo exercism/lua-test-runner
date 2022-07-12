@@ -23,12 +23,7 @@ for test_dir in tests/*; do
     expected_results_file_path="${test_dir}/${expected_results_file}"
 
     bin/run.sh "${test_dir_name}" "${test_dir}" "${test_dir}"
-
-    # Normalize the number of seconds in the results file
-    sed -i -E 's/[0-9]+\.[0-9]+ seconds//' "${results_file_path}"
-
-    echo "${test_dir_name}: comparing ${results_file} to ${expected_results_file}"
-    diff "${results_file_path}" "${expected_results_file_path}"
+    bin/test-result-compare.lua "${results_file_path}" "${expected_results_file_path}"
 
     if [ $? -ne 0 ]; then
         exit_code=1

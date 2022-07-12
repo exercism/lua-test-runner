@@ -1,5 +1,27 @@
 {
-  "version": 1,
+  "version": 2,
   "status": "fail",
-  "message": "*\n0 successes / 0 failures / 1 error / 0 pending : \n\nError -> ./example_partial_fail_spec.lua @ 1\nsuite ./example_partial_fail_spec.lua\n./example_partial_fail_spec.lua:1: module 'partial_fail' not found:\n\tNo LuaRocks module found for partial_fail\n\tno field package.preload['partial_fail']\n\tno file './src/partial_fail.lua'\n\tno file './src/partial_fail/partial_fail.lua'\n\tno file './src/partial_fail/init.lua'\n\tno file '/usr/local/share/lua/5.4/partial_fail.lua'\n\tno file '/usr/local/share/lua/5.4/partial_fail/init.lua'\n\tno file '/usr/local/lib/lua/5.4/partial_fail.lua'\n\tno file '/usr/local/lib/lua/5.4/partial_fail/init.lua'\n\tno file './partial_fail.lua'\n\tno file './partial_fail/init.lua'\n\tno file '/root/.luarocks/share/lua/5.4/partial_fail.lua'\n\tno file '/root/.luarocks/share/lua/5.4/partial_fail/init.lua'\n\tno file './csrc/partial_fail.so'\n\tno file './csrc/partial_fail/partial_fail.so'\n\tno file '/usr/local/lib/lua/5.4/partial_fail.so'\n\tno file '/usr/local/lib/lua/5.4/loadall.so'\n\tno file './partial_fail.so'\n\tno file '/root/.luarocks/lib/lua/5.4/partial_fail.so'\n\nstack traceback:\n\t./example_partial_fail_spec.lua:1: in main chunk"
+  "tests": [
+    {
+      "name": "a known leap year",
+      "status": "pass",
+      "test_code": "assert.is_true(is_leap_year(1996))"
+    },
+    {
+      "name": "any old year",
+      "status": "pass",
+      "test_code": "assert.is_false(is_leap_year(1997))"
+    },
+    {
+      "name": "turn of the 20th century",
+      "status": "pass",
+      "test_code": "assert.is_false(is_leap_year(1900))"
+    },
+    {
+      "name": "turn of the 21st century",
+      "status": "fail",
+      "message": "Expected objects to be the same.\nPassed in:\n(boolean) false\nExpected:\n(boolean) true",
+      "test_code": "assert.is_true(is_leap_year(2400))"
+    }
+  ]
 }
