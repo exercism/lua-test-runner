@@ -16,4 +16,8 @@ describe('leap', function()
   it('turn of the 21st century', function()
     assert.is_true(is_leap_year(2400))
   end)
+
+  it("handles test names with 'apostrophes'", function()
+    assert.is_true(true)
+  end)
 end)
