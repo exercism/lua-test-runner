@@ -21,6 +21,11 @@
       "name": "turn of the 21st century",
       "status": "pass",
       "test_code": "assert.is_true(is_leap_year(2400))"
+    },
+    {
+      "name": "handles test names with 'apostrophes'",
+      "status": "pass",
+      "test_code": "assert.is_true(true)"
     }
   ]
 }

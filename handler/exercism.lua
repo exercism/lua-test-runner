@@ -6,7 +6,7 @@ local function exists(path)
 end
 
 local test_file_format = './%s_spec.lua'
-local test_start_patt = '^(%s*)it%(\'(.+)\',%s*function.*$'
+local test_start_patt = '^(%s*)it%([\'"](.+)[\'"],%s*function.*$'
 local test_end_patt = '^(%s*)end%)$'
 
 local function parse_test_file(slug)
