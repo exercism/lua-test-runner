@@ -11,7 +11,7 @@ RUN apt-get update && \
     apt-get purge --auto-remove && \
     apt-get clean
 
-RUN curl -R -O http://www.lua.org/ftp/lua-${LUA_VER}.tar.gz && \
+RUN curl -R -O -L http://www.lua.org/ftp/lua-${LUA_VER}.tar.gz && \
     [ "$(sha256sum lua-${LUA_VER}.tar.gz | cut -d' ' -f1)" = "${LUA_CHECKSUM}" ] && \
     tar -zxf lua-${LUA_VER}.tar.gz && \
     cd lua-${LUA_VER} && \
