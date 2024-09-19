@@ -26,6 +26,16 @@
       "name": "handles test names with 'apostrophes'",
       "status": "pass",
       "test_code": "assert.is_true(true)"
+    },
+    {
+      "name": "handles tests with multiple lines in the body",
+      "status": "pass",
+      "test_code": "assert.is_false(false)\n\nassert.is_true(true)"
+    },
+    {
+      "name": "handles really long test names that get wrapped by the lua formatter",
+      "status": "pass",
+      "test_code": "assert.is_true(true)"
     }
   ]
 }

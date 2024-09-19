@@ -20,4 +20,16 @@ describe('leap', function()
   it("handles test names with 'apostrophes'", function()
     assert.is_true(true)
   end)
+
+  it('handles tests with multiple lines in the body', function()
+    assert.is_false(false)
+
+    assert.is_true(true)
+  end)
+
+  it(
+    'handles really long test names that get wrapped by the lua formatter',
+    function()
+      assert.is_true(true)
+    end)
 end)

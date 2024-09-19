@@ -6,8 +6,6 @@ local function exists(path)
 end
 
 local test_file_format = './%s_spec.lua'
-local test_start_patt = '^(%s*)it%([\'"](.+)[\'"],%s*function.*$'
-local test_end_patt = '^(%s*)end%)$'
 
 local function parse_test_file(slug)
     local test_file
@@ -21,32 +19,24 @@ local function parse_test_file(slug)
 
     assert(test_file, 'No test file was found')
 
+    local test_file_handle = assert(io.open(test_file, 'r'))
+    local test_file_contents = test_file_handle:read('*a')
+    test_file_handle:close()
+
     local parsed = {}
-    local name, code, indent
-    local idx = 0
+    local idx = 1
 
-    for line in io.lines(test_file) do
-        if name then
-            local line_indent = line:match(test_end_patt)
+    for test in test_file_contents:gmatch('%sit(%b())') do
+        local name = test:match("^%(%s*(%b'')") or test:match('^%(%s*(%b"")')
+        name = name:sub(2, -2)
+    
+        local code = test:match(',%s*function%(%)(.+)end%)$')
+        code = code:gsub('^%s*\n', '')        
+        local indent = code:match('^%s+')
+        code = code:gsub('^' .. indent, ''):gsub('\n' .. indent, '\n'):gsub('%s+$', '')
 
-            if line_indent and #line_indent == indent then
-                parsed[name] = {
-                    code = table.concat(code, '\n'),
-                    idx = idx
-                }
-                name, code, indent = nil, nil, nil
-            elseif line:find('%S') then
-                table.insert(code, line:match('^%s*(.*)$'))
-            end
-        else
-            local line_indent, tname = line:match(test_start_patt)
-            if tname then
-                name = tname
-                code = {}
-                indent = #line_indent
-                idx = idx + 1
-            end
-        end
+        parsed[name] = { idx = idx, code = code }
+        idx = idx + 1
     end
 
     return parsed
