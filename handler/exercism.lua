@@ -29,9 +29,9 @@ local function parse_test_file(slug)
     for test in test_file_contents:gmatch('%sit(%b())') do
         local name = test:match("^%(%s*(%b'')") or test:match('^%(%s*(%b"")')
         name = name:sub(2, -2)
-    
-        local code = test:match(',%s*function%(%)(.+)end%)$')
-        code = code:gsub('^%s*\n', '')        
+
+        local code = test:match(',%s*function%s*%(%)(.+)end%)$')
+        code = code:gsub('^%s*\n', '')
         local indent = code:match('^%s+')
         code = code:gsub('^' .. indent, ''):gsub('\n' .. indent, '\n'):gsub('%s+$', '')
 

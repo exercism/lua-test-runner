@@ -36,6 +36,11 @@
       "name": "handles really long test names that get wrapped by the lua formatter",
       "status": "pass",
       "test_code": "assert.is_true(true)"
+    },
+    {
+      "name": "handles tests with a space after function and before () in the function definition",
+      "status": "pass",
+      "test_code": "assert.is_true(true)"
     }
   ]
 }

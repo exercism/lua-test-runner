@@ -32,4 +32,8 @@ describe('leap', function()
     function()
       assert.is_true(true)
     end)
+
+  it('handles tests with a space after function and before () in the function definition', function ()
+    assert.is_true(true)
+  end)
 end)
