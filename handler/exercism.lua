@@ -29,7 +29,7 @@ local function parse_test_file(slug)
     pcall(function()
         load(test_file_contents, nil, 't', setmetatable({
             describe = function(_, fn)
-                pcall(fn)
+                fn()
             end,
 
             it = function(name, fn)
