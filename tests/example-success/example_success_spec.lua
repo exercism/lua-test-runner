@@ -17,6 +17,11 @@ describe('leap', function()
     assert.is_true(is_leap_year(2400))
   end)
 
+  it('handles tests with parens in strings', function()
+    local s = ')'
+    assert.is_true(true)
+  end)
+
   it("handles test names with 'apostrophes'", function()
     assert.is_true(true)
   end)

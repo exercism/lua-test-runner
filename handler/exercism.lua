@@ -26,18 +26,36 @@ local function parse_test_file(slug)
     local parsed = {}
     local idx = 1
 
-    for test in test_file_contents:gmatch('%sit(%b())') do
-        local name = test:match("^%(%s*(%b'')") or test:match('^%(%s*(%b"")')
-        name = name:sub(2, -2)
-    
-        local code = test:match(',%s*function%(%)(.+)end%)$')
-        code = code:gsub('^%s*\n', '')        
-        local indent = code:match('^%s+')
-        code = code:gsub('^' .. indent, ''):gsub('\n' .. indent, '\n'):gsub('%s+$', '')
+    pcall(function()
+        load(test_file_contents, nil, 't', setmetatable({
+            describe = function(_, fn)
+                pcall(fn)
+            end,
 
-        parsed[name] = { idx = idx, code = code }
-        idx = idx + 1
-    end
+            it = function(name, fn)
+                local debug_info = debug.getinfo(fn, 'S')
+
+                local fn_start = 1
+                for _ = 1, debug_info.linedefined do
+                    fn_start = test_file_contents:find('\n', fn_start) + 1
+                end
+
+                local fn_end = 1
+                for _ = 1, debug_info.lastlinedefined - 1 do
+                    fn_end = test_file_contents:find('\n', fn_end) + 1
+                end
+
+                local code = test_file_contents:sub(fn_start, fn_end)
+                local indent = code:match('^%s+')
+                code = code:gsub('^' .. indent, ''):gsub('\n' .. indent, '\n'):gsub('%s+$', '')
+
+                parsed[name] = { idx = idx, code = code }
+                idx = idx + 1
+            end
+        }, {
+            __index = _G
+        }))()
+    end)
 
     return parsed
 end

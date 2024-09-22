@@ -23,6 +23,11 @@
       "test_code": "assert.is_true(is_leap_year(2400))"
     },
     {
+      "name": "handles tests with parens in strings",
+      "status": "pass",
+      "test_code": "local s = ')'\nassert.is_true(true)"
+    },
+    {
       "name": "handles test names with 'apostrophes'",
       "status": "pass",
       "test_code": "assert.is_true(true)"
