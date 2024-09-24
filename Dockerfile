@@ -6,7 +6,7 @@ ENV LUAROCKS_VER="3.9.2"
 ENV LUAROCKS_GPG_KEY="3FD8F43C2BB3C478"
 
 RUN apt-get update && \
-    apt-get install -y curl gcc jq make unzip gnupg && \
+    apt-get install -y curl gcc jq make unzip gnupg git && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get purge --auto-remove && \
     apt-get clean

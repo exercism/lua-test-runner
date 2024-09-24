@@ -7,9 +7,11 @@ on:
   push:
     branches:
       - main
+  schedule:
+      - cron: "0 0 * * *"
 
 jobs:
-  build:
+  tests:
     name: Tests
     runs-on: ubuntu-22.04
     steps:
@@ -18,3 +20,13 @@ jobs:
 
       - name: Run Tests in Docker
         run: bin/run-tests-in-docker.sh
+
+  integration-tests:
+    name: Integration Tests
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
+
+      - name: Run Integration Tests
+        run: bin/run-integration-tests-in-docker.sh
