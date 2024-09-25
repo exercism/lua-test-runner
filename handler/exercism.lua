@@ -1,7 +1,13 @@
+-- Unfortunately there is no documentation on how to write an output handler
+-- for busted, except the code of already existing output handlers. The base
+-- output handler [1] is probably the most interesting codebase.
+--
+-- [1] https://github.com/lunarmodules/busted/blob/master/busted/outputHandlers/base.lua
 local json = require('dkjson')
 local path = require('pl.path')
 
 local test_file_format = './%s_spec.lua'
+-- Returns the content of the test file if it exists
 local function read_test_file(slug)
     local test_file
     for _, s in ipairs({slug, slug:gsub('-', '_')}) do
@@ -43,18 +49,11 @@ local function exercism_output_handler(options)
     }
     local index = 1
 
-    handler.suite_end = function()
-        if handler.errorsCount > 0 and handler.successesCount == 0 and handler.failuresCount == 0 then
-            result.status = 'error'
-            result.message = handler.errors[1].message
-            result.tests = nil
-        else
-            result.status = handler.failuresCount == 0 and handler.errorsCount == 0 and 'pass' or 'fail'
-        end
-
-        io.write(json.encode(result))
-    end
-
+    -- This handler is called before each test is executed. We use the debug
+    -- library to find out in which line the test function starts and ends, so
+    -- that we can extract the test code from the test_file_content string. The
+    -- test name and code is then added to the results.tests table at the
+    -- current index.
     handler.exercism_test_start = function(element)
         local func_info = debug.getinfo(element.run, 'S')
 
@@ -80,6 +79,10 @@ local function exercism_output_handler(options)
         return nil, true
     end
 
+    -- After a test has been executed, this handler is called, regardless of
+    -- whether it was successful or not. If a test has passed we add the status
+    -- to the current result.tests table. Failed or errored tests are handled
+    -- in seperate handlers below, which are called before this one.
     handler.exercism_test_end = function(element, parent, status, debug)
         if status == 'success' then
             result.tests[index].status = 'pass'
@@ -90,6 +93,8 @@ local function exercism_output_handler(options)
         return nil, true
     end
 
+    -- If a test failed, this handler is called before the test_end handler.
+    -- We add the status and the failed message to the result.tests table.
     local test_message_patt = '^.-%.lua:%d+:%s(.*)$'
     handler.exercism_test_failure = function(element, parent, msg, debug)
         result.tests[index].status = 'fail'
@@ -98,6 +103,8 @@ local function exercism_output_handler(options)
         return nil, true
     end
 
+    -- If a test errors, this handler is called before the test_end handler.
+    -- We add the status and the error message to the result.tests table.
     handler.exercism_test_error = function(element, parent, msg, debug)
         result.tests[index].status = 'error'
         result.tests[index].message = msg
@@ -105,11 +112,27 @@ local function exercism_output_handler(options)
         return nil, true
     end
 
+    -- After a test suite ended, this handler is called. We evalute the
+    -- counters to set the overall status and then the result is written to
+    -- stdout as JSON.
+    handler.exercism_suite_end = function()
+        if handler.errorsCount > 0 and handler.successesCount == 0 and handler.failuresCount == 0 then
+            result.status = 'error'
+            result.message = handler.errors[1].message
+            result.tests = nil
+        else
+            result.status = handler.failuresCount == 0 and handler.errorsCount == 0 and 'pass' or 'fail'
+        end
+
+        io.write(json.encode(result))
+    end
+
+    -- Subscribing the handler functions to the different busted contexts.
     busted.subscribe({'test', 'start'}, handler.exercism_test_start)
     busted.subscribe({'test', 'end'}, handler.exercism_test_end)
     busted.subscribe({'error', 'it'}, handler.exercism_test_error)
     busted.subscribe({'failure', 'it'}, handler.exercism_test_failure)
-    busted.subscribe({'suite', 'end'}, handler.suite_end)
+    busted.subscribe({'suite', 'end'}, handler.exercism_suite_end)
 
     return handler
 end
