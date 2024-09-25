@@ -1,7 +1,5 @@
 local json = require('dkjson')
 local path = require('pl.path')
-local strip = require('pl.stringx').strip
-local readlines = require('pl.utils').readlines
 
 local test_file_format = './%s_spec.lua'
 local function read_test_file(slug)
@@ -17,6 +15,8 @@ local function read_test_file(slug)
     assert(test_file, 'No test file was found')
 
 
+    local test_file_handle <close> = assert(io.open(test_file, 'r'))
+    return test_file_handle:read('a')
 end
 
 local function exercism_output_handler(options)
@@ -36,7 +36,7 @@ local function exercism_output_handler(options)
         os.exit(1)
     end
 
-    local test_file = read_test_file(cli_args['slug'])
+    local test_file_content = read_test_file(cli_args['slug'])
     local result = {
         version = 2,
         tests = {}
@@ -57,17 +57,24 @@ local function exercism_output_handler(options)
 
     handler.exercism_test_start = function(element)
         local func_info = debug.getinfo(element.run, 'S')
-        local body_start = func_info.linedefined + 1
-        local body_end  = func_info.lastlinedefined - 1
 
-        local test_code = {}
-        for i = body_start, body_end do
-            table.insert(test_code, strip(test_file[i]))
+        local fn_start = 1
+        for _ = 1, func_info.linedefined do
+            fn_start = test_file_content:find('\n', fn_start) + 1
         end
+
+        local fn_end = 1
+        for _ = 1, func_info.lastlinedefined - 1 do
+            fn_end = test_file_content:find('\n', fn_end) + 1
+        end
+
+        local test_code = test_file_content:sub(fn_start, fn_end)
+        local indent = test_code:match('^%s+')
+        test_code = test_code:gsub('^' .. indent, ''):gsub('\n' .. indent, '\n'):gsub('%s+$', '')
 
         result.tests[index] = {
             name = element.name,
-            test_code = table.concat(test_code, '\n')
+            test_code = test_code
         }
 
         return nil, true
