@@ -4,6 +4,12 @@
 # Test the test runner by running it against all practice and concept exercises
 # in the track.
 
+# Arguments:
+# --skip-clone: do not (re)clone the track; assume `./track` is already
+#               populated. Used by run-integration-tests-in-docker.sh,
+#               which clones on the host so the container image does
+#               not need git.
+
 # Output:
 # Outputs errors for failed runs.
 
@@ -12,8 +18,10 @@
 
 exit_code=0
 
-rm -rf track
-git clone https://github.com/exercism/lua track
+if [ "$1" != "--skip-clone" ]; then
+    rm -rf track
+    git clone --depth 1 https://github.com/exercism/lua track
+fi
 
 # Iterate over all exercise directories
 for exercise_dir in track/exercises/practice/* track/exercises/concept/*; do
