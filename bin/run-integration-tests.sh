@@ -20,7 +20,7 @@ exit_code=0
 
 if [ "$1" != "--skip-clone" ]; then
     rm -rf track
-    git clone https://github.com/exercism/lua track
+    git clone --depth 1 https://github.com/exercism/lua track
 fi
 
 # Iterate over all exercise directories

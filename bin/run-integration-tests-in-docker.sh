@@ -17,7 +17,7 @@ docker build --rm -t exercism/lua-test-runner .
 # Clone the track on the host. Doing this here (not inside the
 # container) keeps git out of the production image.
 rm -rf track
-git clone https://github.com/exercism/lua track
+git clone --depth 1 https://github.com/exercism/lua track
 
 # Run the Docker image using the settings mimicking the production environment
 docker run \
